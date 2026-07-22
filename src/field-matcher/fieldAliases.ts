@@ -4,12 +4,12 @@ export type FieldAlias = {
 };
 
 export const fieldAliases: FieldAlias[] = [
-  { path: 'personal.fullNameEnglish', aliases: ['applicant name', 'candidate name', 'name of applicant', 'full name', 'name english', 'english name', 'প্রার্থীর নাম', 'আবেদনকারীর নাম'] },
-  { path: 'personal.fullNameBangla', aliases: ['name bangla', 'bangla name', 'name in bangla', 'বাংলা নাম', 'নাম বাংলায়'] },
-  { path: 'personal.fatherNameEnglish', aliases: ['father name', "father's name", 'name of father', 'father', 'পিতার নাম'] },
-  { path: 'personal.fatherNameBangla', aliases: ['father name bangla', "father's name bangla", 'পিতার নাম বাংলা', 'পিতার নাম বাংলায়'] },
-  { path: 'personal.motherNameEnglish', aliases: ['mother name', "mother's name", 'name of mother', 'mother', 'মাতার নাম'] },
-  { path: 'personal.motherNameBangla', aliases: ['mother name bangla', "mother's name bangla", 'মাতার নাম বাংলা', 'মাতার নাম বাংলায়'] },
+  { path: 'personal.fullNameEnglish', aliases: ['applicant name', 'candidate name', 'name of applicant', 'full name', 'name english', 'english name', 'name in english', 'applicant name english'] },
+  { path: 'personal.fullNameBangla', aliases: ['name bangla', 'bangla name', 'name in bangla', 'name bengali', 'applicant name bangla', 'candidate name bangla', 'বাংলা নাম', 'নাম বাংলায়', 'নাম বাংলায়', 'প্রার্থীর নাম', 'আবেদনকারীর নাম', 'প্রার্থীর নাম বাংলা', 'আবেদনকারীর নাম বাংলা'] },
+  { path: 'personal.fatherNameEnglish', aliases: ['father name', "father's name", 'name of father', 'father', 'father name english', "father's name english", 'father name in english'] },
+  { path: 'personal.fatherNameBangla', aliases: ['father name bangla', "father's name bangla", 'father name bengali', 'father name in bangla', 'পিতার নাম', 'পিতার নাম বাংলা', 'পিতার নাম বাংলায়', 'পিতার নাম বাংলায়'] },
+  { path: 'personal.motherNameEnglish', aliases: ['mother name', "mother's name", 'name of mother', 'mother', 'mother name english', "mother's name english", 'mother name in english'] },
+  { path: 'personal.motherNameBangla', aliases: ['mother name bangla', "mother's name bangla", 'mother name bengali', 'mother name in bangla', 'মাতার নাম', 'মাতার নাম বাংলা', 'মাতার নাম বাংলায়', 'মাতার নাম বাংলায়'] },
   { path: 'personal.dateOfBirth', aliases: ['date of birth', 'dob', 'birth date', 'জন্ম তারিখ'] },
   { path: 'personal.gender', aliases: ['gender', 'sex', 'লিঙ্গ'] },
   { path: 'personal.religion', aliases: ['religion', 'ধর্ম'] },

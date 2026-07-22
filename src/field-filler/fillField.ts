@@ -1,6 +1,7 @@
 import type { FieldMatch, FillResultItem } from '@/autofill/types';
 import type { ApplicantProfile } from '@/schemas/applicantProfile';
 import { getProfileValue } from '@/field-filler/getProfileValue';
+import { fieldRequiresBanglaUnicode, isBanglaUnicodeText } from '@/utils/bangla';
 
 export async function fillField(match: FieldMatch, profile: ApplicantProfile): Promise<FillResultItem> {
   const element = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(match.selector);
@@ -14,6 +15,10 @@ export async function fillField(match: FieldMatch, profile: ApplicantProfile): P
 
   if (!value) {
     return createItem(match, label, value, 'skipped', `No saved value for ${match.profilePath}`);
+  }
+
+  if (requiresBanglaTextInput(match, element) && !isBanglaUnicodeText(value)) {
+    return createItem(match, label, value, 'manual', `Bangla Unicode value required for ${match.profilePath}`);
   }
 
   if (element instanceof HTMLInputElement && ['submit', 'button', 'file', 'image', 'reset'].includes(element.type)) {
@@ -116,6 +121,13 @@ function toBoolean(value: string): boolean {
 function isDeclarationLike(match: FieldMatch): boolean {
   const haystack = normalize([match.field.label, match.field.name, match.field.id, match.field.nearbyText].join(' '));
   return haystack.includes('declaration') || haystack.includes('i agree') || haystack.includes('ঘোষণা');
+}
+
+function requiresBanglaTextInput(match: FieldMatch, element: HTMLElement): boolean {
+  if (!fieldRequiresBanglaUnicode(match.field, match.profilePath)) return false;
+  if (element instanceof HTMLTextAreaElement) return true;
+  if (!(element instanceof HTMLInputElement)) return false;
+  return ['text', 'search', ''].includes(element.type);
 }
 
 function createItem(match: FieldMatch, label: string, value: string, status: FillResultItem['status'], reason: string): FillResultItem {

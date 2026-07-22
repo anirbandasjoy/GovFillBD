@@ -1,5 +1,6 @@
 import type { DetectedField, FieldMatch, FillResultItem } from '@/autofill/types';
 import { blockedFieldAliases, fieldAliases } from '@/field-matcher/fieldAliases';
+import { fieldExplicitlyRequestsEnglish, fieldRequiresBanglaUnicode, isBanglaPersonalNameLabel } from '@/utils/bangla';
 
 const EXACT_ID_SCORE = 100;
 const EXACT_LABEL_SCORE = 95;
@@ -48,6 +49,8 @@ function findBestMatch(field: DetectedField): FieldMatch | undefined {
   let bestMatch: FieldMatch | undefined;
 
   fieldAliases.forEach((entry) => {
+    if (!isLanguageCompatible(field, entry.path)) return;
+
     const candidate = scoreField(field, entry.aliases, entry.path);
     if (!bestMatch || candidate.confidence > bestMatch.confidence) {
       bestMatch = candidate;
@@ -55,6 +58,21 @@ function findBestMatch(field: DetectedField): FieldMatch | undefined {
   });
 
   return bestMatch;
+}
+
+function isLanguageCompatible(field: DetectedField, profilePath: string): boolean {
+  const isEnglishNamePath = ['personal.fullNameEnglish', 'personal.fatherNameEnglish', 'personal.motherNameEnglish'].includes(profilePath);
+  const isBanglaNamePath = ['personal.fullNameBangla', 'personal.fatherNameBangla', 'personal.motherNameBangla'].includes(profilePath);
+
+  if ((fieldRequiresBanglaUnicode(field) || isBanglaPersonalNameLabel(field)) && isEnglishNamePath) {
+    return false;
+  }
+
+  if (fieldExplicitlyRequestsEnglish(field) && isBanglaNamePath) {
+    return false;
+  }
+
+  return true;
 }
 
 function scoreField(field: DetectedField, aliases: string[], profilePath: string): FieldMatch {

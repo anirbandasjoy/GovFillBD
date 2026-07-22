@@ -21,11 +21,15 @@ async function handleActionClick(): Promise<void> {
   const profiles = await listProfiles();
 
   if (profiles.length === 0) {
-    await chrome.runtime.openOptionsPage();
+    await openProfilesPage();
     return;
   }
 
   await openProfilePickerPopup();
+}
+
+async function openProfilesPage(): Promise<void> {
+  await chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
 }
 
 async function openProfilePickerPopup(): Promise<void> {

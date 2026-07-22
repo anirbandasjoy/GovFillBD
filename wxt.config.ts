@@ -9,6 +9,10 @@ export default defineConfig({
     description: 'Bangladesh Government Job Application Autofill Assistant',
     permissions: ['activeTab', 'scripting', 'storage'],
     host_permissions: ['<all_urls>'],
+    options_ui: {
+      page: 'options.html',
+      open_in_tab: true
+    },
     action: {
       default_title: 'GovApply Autofill'
     }

@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import type React from 'react';
 import { Button } from '@/popup/components/ui/button';
+import { Checkbox } from '@/popup/components/ui/checkbox';
 import { Input } from '@/popup/components/ui/input';
 import { Label } from '@/popup/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/popup/components/ui/select';
 import { Textarea } from '@/popup/components/ui/textarea';
 import { createEmptyProfile } from '@/profiles/createEmptyProfile';
 import type { ApplicantProfile } from '@/schemas/applicantProfile';
@@ -90,7 +92,7 @@ export function ProfileForm({ initialProfile, onCancel, onSave }: ProfileFormPro
 
   return (
     <div className="space-y-4 pb-4">
-      <div className="sticky top-0 z-10 -mx-4 border-b bg-white/95 px-4 py-3 backdrop-blur">
+      <div className="sticky top-0 z-10 -mx-4 border-b bg-background/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-sm font-semibold">{initialProfile ? 'Edit Profile' : 'Create Profile'}</h2>
@@ -210,9 +212,9 @@ export function ProfileForm({ initialProfile, onCancel, onSave }: ProfileFormPro
         ))}
       </ArraySection>
 
-      {error && <p className="rounded-md bg-red-50 p-2 text-xs text-red-700">{error}</p>}
+      {error && <p className="rounded-md bg-destructive/10 p-2 text-xs text-destructive">{error}</p>}
 
-      <div className="sticky bottom-0 -mx-4 border-t bg-white/95 px-4 py-3 backdrop-blur">
+      <div className="sticky bottom-0 -mx-4 border-t bg-background/95 px-4 py-3 backdrop-blur">
         <Button className="w-full" disabled={saving} onClick={submit}>
           {saving ? 'Saving...' : 'Save Profile'}
         </Button>
@@ -223,8 +225,8 @@ export function ProfileForm({ initialProfile, onCancel, onSave }: ProfileFormPro
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="space-y-3 rounded-lg border bg-white p-3">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-emerald-700">{title}</h3>
+    <section className="space-y-3 rounded-lg border bg-card p-3">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-primary">{title}</h3>
       <div className="space-y-2">{children}</div>
     </section>
   );
@@ -324,26 +326,27 @@ function SelectField({ label, path, options, profile, update }: FieldProps & { o
   return (
     <div className="space-y-1">
       <Label>{label}</Label>
-      <select
-        className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-        value={String(getAtPath(profile, path) ?? '')}
-        onChange={(event) => update(path, event.target.value)}
-      >
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+      <Select value={String(getAtPath(profile, path) ?? '')} onValueChange={(value) => update(path, value)}>
+        <SelectTrigger>
+          <SelectValue placeholder={`Select ${label}`} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
 
 function CheckField({ label, path, profile, update }: FieldProps) {
   return (
-    <label className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
-      <input type="checkbox" checked={Boolean(getAtPath(profile, path))} onChange={(event) => update(path, event.target.checked)} />
-      {label}
+    <label className="flex items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm">
+      <Checkbox checked={Boolean(getAtPath(profile, path))} onCheckedChange={(checked) => update(path, checked === true)} />
+      <span>{label}</span>
     </label>
   );
 }
