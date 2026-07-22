@@ -1,0 +1,7 @@
+@import '@/styles/global.css';
+
+html,
+body {
+  width: 350px;
+  min-height: 480px;
+}
